@@ -157,7 +157,7 @@ def create_manifest_project(url, directory,
 
 def create_remove_project(directory):
 
-	project = ES.Element("remove-project",
+    project = ES.Element("remove-project",
                          attrib={
                              "name": directory
                          })
@@ -238,15 +238,15 @@ def create_dependency_manifest(dependencies):
         if remote == "github":
             if not "/" in repository:
                 repository = '/'.join([android_team, repository])
-				
-		if remote == "remove":
-			project = create_remove_project(target_path)
-		
-		if not remote == "remove":
-			project = create_manifest_project(repository,
+        if remote == "remove":
+            project = create_remove_project(target_path)
+
+        if not remote == "remove":
+            project = create_manifest_project(repository,
                                           target_path,
                                           remote=remote,
                                           revision=revision)
+
         if not project is None:
             manifest = append_to_manifest(project)
             write_to_manifest(manifest)
