@@ -114,6 +114,22 @@ def iterate_manifests():
                 yield project
 
 
+def iterate_remove_manifests():
+    files = []
+    for file in os.listdir(local_manifest_dir):
+        files.append(os.path.join(local_manifest_dir, file))
+    files.append('.repo/manifest.xml')
+    for file in files:
+        try:
+            man = ES.parse(file)
+            man = man.getroot()
+        except IOError, ES.ParseError:
+            print("WARNING: error while parsing %s" % file)
+        else:
+            for project in man.findall("remove-project"):
+                yield project
+
+
 def check_project_exists(url):
     for project in iterate_manifests():
         if project.get("name") == url:
@@ -121,7 +137,7 @@ def check_project_exists(url):
     return False
 
 def check_remove_project_exists(directory):
-    for project in iterate_manifests():
+    for project in iterate_remove_manifests():
         if project.get("name") == directory:
             return True
     return False
