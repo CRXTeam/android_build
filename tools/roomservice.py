@@ -120,6 +120,13 @@ def check_project_exists(url):
             return True
     return False
 
+def check_remove_project_exists(directory):
+    for project in iterate_manifests():
+        if project.get("name") == directory:
+            return True
+    return False
+
+
 
 # Use the indent function from http://stackoverflow.com/a/4590052
 def indent(elem, level=0):
@@ -156,6 +163,10 @@ def create_manifest_project(url, directory,
     return project
 
 def create_remove_project(directory):
+    project_exists = check_remove_project_exists(directory)
+
+    if project_exists:
+        return None
 
     project = ES.Element("remove-project",
                          attrib={
@@ -252,7 +263,7 @@ def create_dependency_manifest(dependencies):
             write_to_manifest(manifest)
             projects.append(target_path)
     if len(projects) > 0:
-        os.system("repo sync -f --no-clone-bundle %s" % " ".join(projects))
+        os.system("repo sync -f --no-clone-bundle")
 
 
 def fetch_dependencies(device):
@@ -285,8 +296,7 @@ def fetch_device(device):
         manifest = append_to_manifest(project)
         write_to_manifest(manifest)
         print("syncing the device config")
-        os.system('repo sync -f --no-clone-bundle %s' % device_dir)
-
+        os.system('repo sync -f --no-clone-bundle')
 
 if __name__ == '__main__':
     if not os.path.isdir(local_manifest_dir):
