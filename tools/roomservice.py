@@ -342,9 +342,9 @@ if __name__ == '__main__':
 
     if not deps_only:
         fetch_device(device)
-	fetch_dependencies(device)
+    fetch_dependencies(device)
 	
-	print("Patching packages from ".parse_device_from_folder(device))
-	parse_patch_file(parse_device_from_folder(device))
+    print("Patching packages from ".parse_device_from_folder(device)));
+    parse_patch_file(parse_device_from_folder(device))
 
 
