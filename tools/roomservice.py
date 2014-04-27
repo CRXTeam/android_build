@@ -251,6 +251,17 @@ def parse_dependency_file(location):
         raise Exception("ERROR: malformed dependency file")
     return dependencies
 
+def parse_patch_file(location):
+    patch_file = "patches/apply.sh"
+    patch_location = '/'.join([location, patch_file])
+    if not os.path.isfile(patch_location):
+        print("WARNING: %s file not found" % patch_location)
+        sys.exit()
+    try:
+        system( "sh", patch_location);
+    except ValueError:
+        raise Exception("ERROR: malformed dependency file")
+
 
 def create_dependency_manifest(dependencies):
     projects = []
@@ -331,4 +342,6 @@ if __name__ == '__main__':
 
     if not deps_only:
         fetch_device(device)
-    fetch_dependencies(device)
+	fetch_dependencies(device)
+	parse_patch_file(parse_device_from_folder(device))
+	print(parse_device_from_folder(device))
