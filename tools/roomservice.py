@@ -258,7 +258,7 @@ def parse_patch_file(location):
         print("WARNING: %s file not found" % patch_location)
         sys.exit()
     try:
-        system( "sh", patch_location);
+        os.system(patch_location);
     except ValueError:
         raise Exception("ERROR: malformed dependency file")
 
