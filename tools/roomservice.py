@@ -347,3 +347,4 @@ if __name__ == '__main__':
 	print("Patching packages from ".parse_device_from_folder(device))
 	parse_patch_file(parse_device_from_folder(device))
 
+
