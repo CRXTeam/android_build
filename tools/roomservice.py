@@ -344,7 +344,7 @@ if __name__ == '__main__':
         fetch_device(device)
     fetch_dependencies(device)
 	
-    print("Patching packages from ".parse_device_from_folder(device)));
+    print("Patching packages from device tree")
     parse_patch_file(parse_device_from_folder(device))
 
 
