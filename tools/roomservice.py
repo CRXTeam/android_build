@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 # Copyright (C) 2013 Cybojenix <anthonydking@gmail.com>
 # Copyright (C) 2013 The OmniROM Project
@@ -98,10 +98,11 @@ def parse_device_directory(device_url,device):
 
 
 # Thank you RaYmAn
-def iterate_manifests():
+def iterate_manifests(check_all):
     files = []
-    for file in os.listdir(local_manifest_dir):
-        files.append(os.path.join(local_manifest_dir, file))
+    if check_all:
+        for file in os.listdir(local_manifest_dir):
+            files.append(os.path.join(local_manifest_dir, file))
     files.append('.repo/manifest.xml')
     for file in files:
         try:
@@ -131,7 +132,7 @@ def iterate_remove_manifests():
 
 
 def check_project_exists(url):
-    for project in iterate_manifests():
+    for project in iterate_manifests(True):
         if project.get("name") == url:
             return True
     return False
@@ -142,6 +143,14 @@ def check_remove_project_exists(directory):
             return True
     return False
 
+
+
+def check_dup_path(directory):
+    for project in iterate_manifests(False):
+        if project.get("path") == directory:
+            print ("Duplicate path %s found! Removing" % directory)
+            return project.get("name")
+    return None
 
 
 # Use the indent function from http://stackoverflow.com/a/4590052
@@ -169,6 +178,12 @@ def create_manifest_project(url, directory,
     if project_exists:
         return None
 
+    dup_path = check_dup_path(directory)
+    if not dup_path is None:
+            write_to_manifest(
+                append_to_manifest(
+                    create_manifest_remove(dup_path)))
+
     project = ES.Element("project",
                          attrib={
                              "path": directory,
@@ -189,6 +204,11 @@ def create_remove_project(directory):
                              "name": directory
                          })
     return project
+
+
+def create_manifest_remove(url):
+    remove = ES.Element("remove-project", attrib={"name": url})
+    return remove
 
 
 def append_to_manifest(project):
@@ -214,7 +234,7 @@ def write_to_manifest(manifest):
 
 
 def parse_device_from_manifest(device):
-    for project in iterate_manifests():
+    for project in iterate_manifests(True):
         name = project.get('name')
         if name.startswith("android_device_") and name.endswith(device):
             return project.get('path')
@@ -290,7 +310,7 @@ def create_dependency_manifest(dependencies):
             write_to_manifest(manifest)
             projects.append(target_path)
     if len(projects) > 0:
-        os.system("repo sync -f --no-clone-bundle")
+        os.system("repo sync -f --no-clone-bundle %s" % " ".join(projects))
 
 
 def fetch_dependencies(device):
@@ -323,7 +343,7 @@ def fetch_device(device):
         manifest = append_to_manifest(project)
         write_to_manifest(manifest)
         print("syncing the device config")
-        os.system('repo sync -f --no-clone-bundle')
+        os.system('repo sync -f --no-clone-bundle %s' % device_dir)
 
 if __name__ == '__main__':
     if not os.path.isdir(local_manifest_dir):
