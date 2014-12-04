@@ -44,7 +44,7 @@ default_team_rem = "github"
 # this shouldn't change unless google makes changes
 local_manifest_dir = ".repo/local_manifests"
 # change this to your name on github (or equivalent hosting)
-android_team = "AOSPA-legacy"
+android_team = "CRXTeam"
 
 
 def check_repo_exists(git_data):
@@ -226,7 +226,7 @@ def parse_device_from_folder(device):
 
 
 def parse_dependency_file(location):
-    dep_file = "pa.dependencies"
+    dep_file = "cpa.dependencies"
     dep_location = '/'.join([location, dep_file])
     if not os.path.isfile(dep_location):
         print("WARNING: %s file not found" % dep_location)
@@ -237,6 +237,18 @@ def parse_dependency_file(location):
     except ValueError:
         raise Exception("ERROR: malformed dependency file")
     return dependencies
+
+
+def parse_patch_file(location):
+    patch_file = "patches/apply.sh"
+    patch_location = '/'.join([location, patch_file])
+    if not os.path.isfile(patch_location):
+        print("WARNING: %s file not found" % patch_location)
+        sys.exit()
+    try:
+        os.system(patch_location);
+    except ValueError:
+        raise Exception("ERROR: malformed dependency file")
 
 
 def create_dependency_manifest(dependencies):
@@ -314,4 +326,6 @@ if __name__ == '__main__':
 
     if not deps_only:
         fetch_device(device)
-    fetch_dependencies(device)
+        fetch_dependencies(device)
+        print("Patching packages from device tree")
+        parse_patch_file(parse_device_from_folder(device))
