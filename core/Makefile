@@ -1637,6 +1637,9 @@ endif
 
 ifneq ($(TARGET_UNIFIED_DEVICE),)
     $(INTERNAL_OTA_PACKAGE_TARGET): override_prop := --override_prop=true
+    ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
+        $(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_DEVICE)
+    endif
 endif
 
 ifneq ($(TARGET_USES_BLOCK_BASED_OTA),false)
@@ -1674,6 +1677,13 @@ ifneq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
 endif
 endif
 	@echo -e ${CL_CYN}"Package Complete: $(PA_TARGET_PACKAGE)"${CL_RST}
+
+ifeq ($(CHANGELOG),true)
+# Generate changelog
+	@echo -e ${CL_GRN}"Generating Changelog"${CL_RST}
+	$(hide) ./vendor/pa/utils/changelog.sh
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(TARGET_PRODUCT)-$(ROM_VERSION).txt
+endif
 
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
