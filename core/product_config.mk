@@ -179,9 +179,9 @@ include $(BUILD_SYSTEM)/node_fns.mk
 include $(BUILD_SYSTEM)/product.mk
 include $(BUILD_SYSTEM)/device.mk
 
-# A PA build needs only the PA product makefiles.
-ifneq ($(PA_BUILD),)
-  all_product_configs := $(shell ls vendor/pa/products/pa_$(PA_BUILD).mk)
+# A CPA build needs only the CPA product makefiles.
+ifneq ($(CPA_BUILD),)
+  all_product_configs := $(shell ls vendor/cpa/products/pa_$(CPA_BUILD).mk)
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
