@@ -1007,7 +1007,7 @@ INTERNAL_SYSTEMIMAGE_FILES := $(filter $(TARGET_OUT)/%, \
 
 systemimage-squisher: $(INTERNAL_SYSTEMIMAGE_FILES)
 	@echo -e "Optimizing PNGs to Shrink ROM Size!"
-	$(hide) APKCERTS=$(APKCERTS_FILE) ./vendor/pa/utils/squisher
+	$(hide) APKCERTS=$(APKCERTS_FILE) ./vendor/cpa/utils/squisher
 
 .PHONY: systemimage-squisher
 
@@ -1681,7 +1681,7 @@ endif
 ifeq ($(CHANGELOG),true)
 # Generate changelog
 	@echo -e ${CL_GRN}"Generating Changelog"${CL_RST}
-	$(hide) ./vendor/pa/utils/changelog.sh
+	$(hide) ./vendor/cpa/utils/changelog.sh
 	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(TARGET_PRODUCT)-$(ROM_VERSION).txt
 endif
 
