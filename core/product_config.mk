@@ -181,7 +181,7 @@ include $(BUILD_SYSTEM)/device.mk
 
 # A CPA build needs only the CPA product makefiles.
 ifneq ($(CPA_BUILD),)
-  all_product_configs := $(shell ls vendor/cpa/products/pa_$(CPA_BUILD).mk)
+  all_product_configs := $(shell ls vendor/cpa/products/cpa_$(CPA_BUILD).mk)
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
@@ -192,9 +192,9 @@ else
     # files in the tree.
     all_product_configs := $(get-all-product-makefiles)
   endif # TARGET_BUILD_APPS
-endif # PA_BUILD
+endif # CPA_BUILD
 
-ifeq ($(PA_BUILD),)
+ifeq ($(CPA_BUILD),)
 # Find the product config makefile for the current product.
 # all_product_configs consists items like:
 # <product_name>:<path_to_the_product_makefile>

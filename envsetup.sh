@@ -64,13 +64,13 @@ function check_product()
         return
     fi
 
-    if (echo -n $1 | grep -q -e "^pa_") ; then
-       PA_BUILD=$(echo -n $1 | sed -e 's/^pa_//g')
-       export BUILD_NUMBER=$((date +%s%N ; echo $PA_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
+    if (echo -n $1 | grep -q -e "^cpa_") ; then
+       CPA_BUILD=$(echo -n $1 | sed -e 's/^cpa_//g')
+       export BUILD_NUMBER=$((date +%s%N ; echo $CPA_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
     else
-       PA_BUILD=
+       CPA_BUILD=
     fi
-    export PA_BUILD
+    export CPA_BUILD
 
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
